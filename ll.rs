@@ -1,8 +1,11 @@
+#![allow(non_camel_case_types)]
+#![allow(dead_code)]
+
 use libc::{c_char, c_int, c_uint, c_void, size_t};
 
 pub type c_bool = c_int;
 
-pub type csh = c_void;
+pub type csh = *c_void;
 pub type cs_err = c_int;
 pub type cs_opt_type = c_int;
 
@@ -16,6 +19,7 @@ pub struct cs_insn {
     pub detail: *c_void,
 }
 
+#[link(name = "capstone")]
 extern "C" {
     pub fn cs_version(major: *mut c_int, minor: *mut c_int) -> c_uint;
     pub fn cs_support(query: c_int) -> c_bool;
