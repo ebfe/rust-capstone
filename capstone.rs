@@ -121,6 +121,12 @@ impl Engine {
     }
 }
 
+impl Drop for Engine {
+    fn drop(&mut self) {
+        unsafe{ ll::cs_close(&mut self.handle) };
+    }
+}
+
 pub fn version() -> (int, int) {
     let mut major : c_int = 0;
     let mut minor : c_int = 0;
