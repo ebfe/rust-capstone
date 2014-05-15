@@ -20,7 +20,7 @@ pub enum Arch {
 }
 
 bitflags!(
-	flags Mode: u32 {
+	flags Mode: c_int {
 		static ModeLittleEndian = 0,
 		static ModeArm = 1 << 1,
 		static Mode16 = 1 << 2,
@@ -38,6 +38,24 @@ pub enum Opt {
     OptDetail,
     OptMode,
     // OptMem
+}
+
+pub struct Error {
+    code: uint,
+    msg:  Option<~str>,
+}
+
+impl Error {
+    pub fn new(err: uint) -> Error {
+        unsafe {
+            match CString::new(ll::cs_strerror(err as i32), false).as_str() {
+                Some(s) => 
+                    Error{ code: err, msg: Some(s.to_owned()) },
+                None =>
+                    Error{ code: err, msg: None },
+            }
+        }
+    }
 }
 
 pub struct Engine {
@@ -149,6 +167,15 @@ mod tests {
                 }
             }
             Err(err) => fail!("Engine::new error: {:?}", err)
+        }
+    }
+
+    #[test]
+    pub fn test_error() {
+        use super::Error;
+        for i in range(0, 12) {
+            let e = Error::new(i as uint);
+            println!("{:x} {}", e.code, e.msg);
         }
     }
 }
