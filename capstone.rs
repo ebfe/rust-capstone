@@ -42,14 +42,14 @@ pub enum Opt {
 
 pub struct Error {
     code: uint,
-    msg:  Option<~str>,
+    msg:  Option<String>,
 }
 
 impl Error {
     pub fn new(err: uint) -> Error {
         unsafe {
             match CString::new(ll::cs_strerror(err as i32), false).as_str() {
-                Some(s) => 
+                Some(s) =>
                     Error{ code: err, msg: Some(s.to_owned()) },
                 None =>
                     Error{ code: err, msg: None },
@@ -59,20 +59,20 @@ impl Error {
 }
 
 pub struct Engine {
-	handle: *c_void 
+	handle: *c_void
 }
 
 pub struct Insn {
-    pub address: u64,
+    pub addr: u64,
     pub bytes: Vec<u8>,
-    pub mnemonic: ~str,
-    pub op_str: ~str, 
+    pub mnemonic: String,
+    pub op_str: String,
 }
 
 impl Engine {
     pub fn new(arch: Arch, mode: Mode) -> Result<Engine, uint> {
         let mut handle : *c_void = 0 as *c_void;
-        unsafe { 
+        unsafe {
             match ll::cs_open(arch as c_int, mode.bits as c_int, &mut handle) {
                 0 => Ok(Engine{handle: handle}),
                 err => Err(err as uint),
@@ -99,11 +99,11 @@ impl Engine {
                     let cinsn = CVec::new(insn, n as uint);
                     for &i in cinsn.as_slice().iter() {
                         let bvec : Vec<u8> = Vec::from_fn(i.size as uint, |n| { i.bytes[n] });
-                        let mnem : ~str = CString::new(i.mnemonic.as_ptr() as *i8, false).as_str().unwrap().to_owned();
-                        let ops : ~str = CString::new(i.op_str.as_ptr() as *i8, false).as_str().unwrap().to_owned();
+                        let mnem : String = CString::new(i.mnemonic.as_ptr() as *i8, false).as_str().unwrap().to_strbuf();
+                        let ops : String = CString::new(i.op_str.as_ptr() as *i8, false).as_str().unwrap().to_strbuf();
 
                         v.push(Insn{
-                            address: i.address,
+                            addr: i.address,
                             bytes: bvec,
                             mnemonic: mnem,
                             op_str: ops,
@@ -166,7 +166,7 @@ mod tests {
                         println!("{:?}", insn);
                         for i in range(0, insn.len()) {
                             let c = insn.get(i);
-                            println!("{:x}: {} {} {}", c.address,  c.bytes, c.mnemonic, c.op_str);
+                            println!("{:x}: {} {} {}", c.addr,  c.bytes, c.mnemonic, c.op_str);
                         }
                     }
                     Err(err) => fail!("Engine::disasm error: {:?}", err)
