@@ -5,6 +5,9 @@ extern crate libc;
 extern crate core;
 extern crate serialize;
 
+#[cfg(test)]
+extern crate debug;
+
 use libc::{c_int, c_void, size_t};
 use std::c_str::CString;
 use std::c_vec::CVec;
