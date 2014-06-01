@@ -50,7 +50,7 @@ impl Error {
         unsafe {
             match CString::new(ll::cs_strerror(err as i32), false).as_str() {
                 Some(s) =>
-                    Error{ code: err, msg: Some(s.to_owned()) },
+                    Error{ code: err, msg: Some(s.to_string()) },
                 None =>
                     Error{ code: err, msg: None },
             }
@@ -99,8 +99,8 @@ impl Engine {
                     let cinsn = CVec::new(insn, n as uint);
                     for &i in cinsn.as_slice().iter() {
                         let bvec : Vec<u8> = Vec::from_fn(i.size as uint, |n| { i.bytes[n] });
-                        let mnem : String = CString::new(i.mnemonic.as_ptr() as *i8, false).as_str().unwrap().to_strbuf();
-                        let ops : String = CString::new(i.op_str.as_ptr() as *i8, false).as_str().unwrap().to_strbuf();
+                        let mnem : String = CString::new(i.mnemonic.as_ptr() as *i8, false).as_str().unwrap().to_string();
+                        let ops : String = CString::new(i.op_str.as_ptr() as *i8, false).as_str().unwrap().to_string();
 
                         v.push(Insn{
                             addr: i.address,
