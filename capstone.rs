@@ -182,7 +182,7 @@ mod tests {
     #[test]
     pub fn test_error() {
         use super::Error;
-        for i in range(0, 12) {
+        for i in range(0, 12u) {
             let e = Error::new(i as uint);
             println!("{:x} {}", e.code, e.msg);
         }
