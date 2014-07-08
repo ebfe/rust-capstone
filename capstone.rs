@@ -62,7 +62,7 @@ impl Error {
 }
 
 pub struct Engine {
-	handle: *c_void
+	handle: *const c_void
 }
 
 pub struct Insn {
@@ -74,7 +74,7 @@ pub struct Insn {
 
 impl Engine {
     pub fn new(arch: Arch, mode: Mode) -> Result<Engine, uint> {
-        let mut handle : *c_void = 0 as *c_void;
+        let mut handle : *const c_void = 0 as *const c_void;
         unsafe {
             match ll::cs_open(arch as c_int, mode.bits as c_int, &mut handle) {
                 0 => Ok(Engine{handle: handle}),
@@ -102,8 +102,8 @@ impl Engine {
                     let cinsn = CVec::new(insn, n as uint);
                     for &i in cinsn.as_slice().iter() {
                         let bvec : Vec<u8> = Vec::from_fn(i.size as uint, |n| { i.bytes[n] });
-                        let mnem : String = CString::new(i.mnemonic.as_ptr() as *i8, false).as_str().unwrap().to_string();
-                        let ops : String = CString::new(i.op_str.as_ptr() as *i8, false).as_str().unwrap().to_string();
+                        let mnem : String = CString::new(i.mnemonic.as_ptr() as *const i8, false).as_str().unwrap().to_string();
+                        let ops : String = CString::new(i.op_str.as_ptr() as *const i8, false).as_str().unwrap().to_string();
 
                         v.push(Insn{
                             addr: i.address,
