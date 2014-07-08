@@ -1,4 +1,4 @@
-#![crate_id="capstone#0.2.1"]
+#![crate_name="capstone"]
 #![crate_type="rlib"]
 
 extern crate libc;
