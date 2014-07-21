@@ -30,7 +30,8 @@ extern "C" {
     pub fn cs_strerror(code: cs_err) -> *const c_char;
     pub fn cs_disasm_ex(handle: csh, code: *const u8, code_size: size_t, address: u64, count: size_t, insn: *mut *mut cs_insn) -> size_t;
     pub fn cs_free(insn: *mut cs_insn, count: size_t);
-    pub fn cs_reg_name(handle: csh, reg_id: c_uint) -> *const c_char; pub fn cs_insn_name(handle: csh, insn_id: c_uint) -> *const c_char;
+    pub fn cs_reg_name(handle: csh, reg_id: c_uint) -> *const c_char;
+    pub fn cs_insn_name(handle: csh, insn_id: c_uint) -> *const c_char;
     pub fn cs_insn_group(handle: csh, insn: *mut cs_insn, group_id: c_uint) -> c_bool;
     pub fn cs_reg_read(handle: csh, insn: *mut cs_insn, reg_id: c_uint) -> c_bool;
     pub fn cs_reg_write(handle: csh, insn: *mut cs_insn, reg_id: c_uint) -> c_bool;
