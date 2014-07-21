@@ -44,12 +44,12 @@ pub enum Opt {
 }
 
 pub struct Error {
-    code: uint,
-    msg:  Option<String>,
+    pub code: uint,
+    pub msg:  Option<String>,
 }
 
 impl Error {
-    pub fn new(err: uint) -> Error {
+    fn new(err: uint) -> Error {
         unsafe {
             match CString::new(ll::cs_strerror(err as i32), false).as_str() {
                 Some(s) =>
@@ -73,30 +73,30 @@ pub struct Insn {
 }
 
 impl Engine {
-    pub fn new(arch: Arch, mode: Mode) -> Result<Engine, uint> {
+    pub fn new(arch: Arch, mode: Mode) -> Result<Engine, Error> {
         let mut handle : *const c_void = 0 as *const c_void;
         unsafe {
             match ll::cs_open(arch as c_int, mode.bits as c_int, &mut handle) {
                 0 => Ok(Engine{handle: handle}),
-                err => Err(err as uint),
+                e => Err(Error::new(e as uint)),
             }
         }
     }
 
-    pub fn set_option(&self, option: Opt, value: uint) -> Result<(), uint> {
+    pub fn set_option(&self, option: Opt, value: uint) -> Result<(), Error> {
         unsafe {
             match ll::cs_option(self.handle, option as c_int, value as size_t) {
                 0 => Ok(()),
-                e => Err(e as uint),
+                e => Err(Error::new(e as uint)),
             }
         }
     }
 
-    pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, uint> {
+    pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, Error> {
         unsafe {
             let mut insn : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
             match ll::cs_disasm_ex(self.handle, code.as_ptr(), code.len() as size_t, addr, count as u64, &mut insn) {
-                0 => Err(self.errno()),
+                0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
                     let cinsn = CVec::new(insn, n as uint);
