@@ -1,12 +1,5 @@
 before_install:
-        - curl -O http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
-        - tar xfz rust-nightly-x86_64-unknown-linux-gnu.tar.gz
-        - sudo rust-nightly-x86_64-unknown-linux-gnu/install.sh
-        - cd -
-        - git clone --recursive https://github.com/rust-lang/cargo
-        - cd cargo
-        - make 
-        - sudo make install
+        - curl www.rust-lang.org/rustup.sh | sudo bash
         - cd -
         - git clone https://github.com/aquynh/capstone
         - cd capstone
