@@ -1,10 +1,9 @@
 before_install:
         - curl www.rust-lang.org/rustup.sh | sudo bash
-        - cd -
+
+install:
         - git clone https://github.com/aquynh/capstone
-        - cd capstone
-        - sudo make install
-        - cd -
+        - (cd capstone && sudo make install)
 
 script:
         - cargo build --verbose
