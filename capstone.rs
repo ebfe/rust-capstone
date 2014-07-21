@@ -168,7 +168,7 @@ mod tests {
                     Ok(insn) => {
                         println!("{:?}", insn);
                         for i in range(0, insn.len()) {
-                            let c = insn.get(i);
+                            let ref c = insn[i];
                             println!("{:x}: {} {} {}", c.addr,  c.bytes, c.mnemonic, c.op_str);
                         }
                     }
