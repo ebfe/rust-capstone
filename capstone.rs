@@ -1,5 +1,6 @@
 #![crate_name="capstone"]
 #![crate_type="rlib"]
+#![experimental]
 
 extern crate libc;
 extern crate core;
