@@ -1,5 +1,5 @@
 before_install:
-        - curl www.rust-lang.org/rustup.sh | sudo bash
+        - curl https://static.rust-lang.org/rustup.sh | sudo bash
 
 install:
         - git clone https://github.com/aquynh/capstone
