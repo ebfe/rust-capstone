@@ -9,6 +9,7 @@ pub type csh = *const c_void;
 pub type cs_err = c_int;
 pub type cs_opt_type = c_int;
 
+#[repr(C)]
 pub struct cs_insn {
     pub id: c_uint,
     pub address: u64,
