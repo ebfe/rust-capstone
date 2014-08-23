@@ -1,10 +1,5 @@
-before_install:
-        - curl https://static.rust-lang.org/rustup.sh | sudo bash
+language: rust
 
 install:
         - git clone https://github.com/aquynh/capstone
         - (cd capstone && sudo make install)
-
-script:
-        - cargo build --verbose
-        - cargo test --verbose
