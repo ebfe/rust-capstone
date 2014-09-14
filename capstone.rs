@@ -24,16 +24,16 @@ pub enum Arch {
 }
 
 bitflags!(
-	flags Mode: c_int {
+	flags Mode: u32 {
 		static ModeLittleEndian = 0,
-		static ModeArm = 1 << 1,
-		static Mode16 = 1 << 2,
-		static Mode32 = 1 << 3,
-		static Mode64 = 1 << 4,
-		static ModeThumb = 1 << 4,
-		static ModeMicro = 1 << 4,
-		static ModeN64 = 1 << 5,
-		static ModeBigEndian = 1 << 31
+		static ModeArm          = 0,
+		static Mode16           = 1 << 1,
+		static Mode32           = 1 << 2,
+		static Mode64           = 1 << 3,
+		static ModeThumb        = 1 << 4,
+		static ModeMicro        = 1 << 4,
+		static ModeN64          = 1 << 5,
+		static ModeBigEndian    = 1 << 31
 	}
 )
 
