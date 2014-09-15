@@ -46,7 +46,7 @@ pub enum Opt {
 
 pub struct Error {
     pub code: uint,
-    pub msg:  Option<String>,
+    pub desc: Option<String>,
 }
 
 impl Error {
@@ -54,9 +54,9 @@ impl Error {
         unsafe {
             match CString::new(ll::cs_strerror(err as i32), false).as_str() {
                 Some(s) =>
-                    Error{ code: err, msg: Some(s.to_string()) },
+                    Error{ code: err, desc: Some(s.to_string()) },
                 None =>
-                    Error{ code: err, msg: None },
+                    Error{ code: err, desc: None },
             }
         }
     }
@@ -185,7 +185,7 @@ mod tests {
         use super::Error;
         for i in range(0, 12u) {
             let e = Error::new(i as uint);
-            println!("{:x} {}", e.code, e.msg);
+            println!("{:x} {}", e.code, e.desc);
         }
     }
 }
