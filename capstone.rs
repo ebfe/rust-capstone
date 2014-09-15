@@ -2,6 +2,8 @@
 #![crate_type="rlib"]
 #![experimental]
 
+#![feature(globs)]
+
 extern crate libc;
 extern crate core;
 extern crate serialize;
@@ -14,6 +16,9 @@ use std::c_str::CString;
 use std::c_vec::CVec;
 
 mod ll;
+
+#[cfg(test)]
+mod tests;
 
 pub enum Arch {
 	ArchArm = 0,
@@ -140,52 +145,4 @@ pub fn version() -> (int, int) {
 
 pub fn supports(arch: Arch) -> bool {
     unsafe{ ll::cs_support(arch as c_int) == 0 }
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    pub fn test_version() {
-        use super::version;
-        println!("{:?}", super::version());
-    }
-
-    #[test]
-    pub fn test_engine_new() {
-        use super::{Engine, ArchX86, Mode32};
-
-        match Engine::new(ArchX86, Mode32) {
-            Ok(e) => println!("{:?}", e),
-            Err(err) => fail!("Engine::new error: {:?}", err),
-        }
-    }
-
-    #[test]
-    pub fn test_engine_disasm() {
-        use super::{Engine, ArchX86, Mode32};
-        match Engine::new(ArchX86, Mode32) {
-            Ok(e) => {
-                match e.disasm(&[0xeb, 0xfe, 0x90, 0x90], 0x80000000, 5) {
-                    Ok(insn) => {
-                        println!("{:?}", insn);
-                        for i in range(0, insn.len()) {
-                            let ref c = insn[i];
-                            println!("{:x}: {} {} {}", c.addr,  c.bytes, c.mnemonic, c.op_str);
-                        }
-                    }
-                    Err(err) => fail!("Engine::disasm error: {:?}", err)
-                }
-            }
-            Err(err) => fail!("Engine::new error: {:?}", err)
-        }
-    }
-
-    #[test]
-    pub fn test_error() {
-        use super::Error;
-        for i in range(0, 12u) {
-            let e = Error::new(i as uint);
-            println!("{:x} {}", e.code, e.desc);
-        }
-    }
 }
