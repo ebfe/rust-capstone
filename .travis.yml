@@ -3,4 +3,5 @@ language: rust
 install:
         - git clone https://github.com/aquynh/capstone
         - git checkout master
+        - git describe --tags --always
         - (cd capstone && sudo make install)
