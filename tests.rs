@@ -109,7 +109,7 @@ pub fn test_engine_disasm() {
                 addr: 0x1004,
                 bytes: vec![0x04, 0xe0, 0x2d, 0xe5, ],
                 mnemonic: "str".to_string(),
-                op_str: "lr, [sp, #-4]!".to_string(),
+                op_str: "lr, [sp, #-0x4]!".to_string(),
             }, Insn{
                 addr: 0x1008,
                 bytes: vec![0x00, 0x00, 0x00, 0x00, ],
