@@ -101,7 +101,7 @@ impl Engine {
     pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, Error> {
         unsafe {
             let mut insn : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
-            match ll::cs_disasm_ex(self.handle, code.as_ptr(), code.len() as size_t, addr, count as u64, &mut insn) {
+            match ll::cs_disasm_ex(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut insn) {
                 0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
