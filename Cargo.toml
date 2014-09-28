@@ -1,10 +1,4 @@
 [project]
-name = "rust-capstone"
+name = "capstone"
 version = "0.0.0"
 authors = ["Michael Gehring <mg@ebfe.org>"]
-
-[lib]
-name = "capstone"
-path = "capstone.rs"
-
-
