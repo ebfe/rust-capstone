@@ -67,15 +67,15 @@ impl Error {
     }
 }
 
-pub struct Engine {
-	handle: *const c_void
-}
-
 pub struct Insn {
     pub addr: u64,
     pub bytes: Vec<u8>,
     pub mnemonic: String,
     pub op_str: String,
+}
+
+pub struct Engine {
+	handle: *const c_void
 }
 
 impl Engine {
@@ -100,25 +100,21 @@ impl Engine {
 
     pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, Error> {
         unsafe {
-            let mut insn : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
-            match ll::cs_disasm_ex(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut insn) {
+            let mut cinsn : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
+            match ll::cs_disasm_ex(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut cinsn) {
                 0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
-                    let cinsn = CVec::new(insn, n as uint);
-                    for &i in cinsn.as_slice().iter() {
-                        let bvec : Vec<u8> = Vec::from_fn(i.size as uint, |n| { i.bytes[n] });
-                        let mnem : String = CString::new(i.mnemonic.as_ptr() as *const i8, false).as_str().unwrap().to_string();
-                        let ops : String = CString::new(i.op_str.as_ptr() as *const i8, false).as_str().unwrap().to_string();
+                    v.extend(CVec::new(cinsn, n as uint).as_slice().iter().map(|ci| {
+                        Insn{
+                            addr:     ci.address,
+                            bytes:    Vec::from_fn(ci.size as uint, |n| { ci.bytes[n] }),
+                            mnemonic: CString::new(ci.mnemonic.as_ptr() as *const i8, false).as_str().unwrap_or("<invalid utf8>").to_string(),
+                            op_str:   CString::new(ci.op_str.as_ptr() as *const i8, false).as_str().unwrap_or("<invalid utf8>").to_string(),
+                        }
 
-                        v.push(Insn{
-                            addr: i.address,
-                            bytes: bvec,
-                            mnemonic: mnem,
-                            op_str: ops,
-                        });
-                    }
-                    ll::cs_free(insn, n);
+                    }));
+                    ll::cs_free(cinsn, n);
                     Ok(v)
                 },
             }
