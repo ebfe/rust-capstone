@@ -356,13 +356,13 @@ pub fn test_engine_disasm() {
     ];
 
     for (i, test) in tests.iter().enumerate() {
-        println!("test case #{} / {:?} {:?}", i, test.arch, test.mode);
+        println!("test case #{} / {} {}", i, test.arch, test.mode);
         match Engine::new(test.arch, test.mode) {
             Ok(e) => {
                 for &(opt, val) in test.opts.iter() {
                     match e.set_option(opt, val) {
                         Ok(_) => (),
-                        Err(err) => fail!("#{} Engine::set_option({:?}, {:?}) failed: {:?}\n", i, opt, val, err),
+                        Err(err) => fail!("#{} Engine::set_option({}, {}) failed: {}\n", i, opt, val, err),
                     }
                 }
                 match e.disasm(test.code.as_slice(), 0x1000, 0) {

@@ -8,9 +8,6 @@ extern crate libc;
 extern crate core;
 extern crate serialize;
 
-#[cfg(test)]
-extern crate debug;
-
 use libc::{c_int, c_void, size_t};
 use std::c_str::CString;
 use std::c_vec::CVec;
@@ -20,6 +17,7 @@ mod ll;
 #[cfg(test)]
 mod tests;
 
+#[deriving(Show)]
 pub enum Arch {
 	ArchArm = 0,
 	ArchArm64,
@@ -29,6 +27,7 @@ pub enum Arch {
 }
 
 bitflags!(
+    #[deriving(Show)]
 	flags Mode: u32 {
 		const ModeLittleEndian = 0,
 		const ModeArm          = 0,
@@ -42,6 +41,7 @@ bitflags!(
 	}
 )
 
+#[deriving(Show)]
 pub enum Opt {
     OptSyntax = 1,
     OptDetail,
@@ -49,6 +49,7 @@ pub enum Opt {
     // OptMem
 }
 
+#[deriving(Show)]
 pub struct Error {
     pub code: uint,
     pub desc: Option<String>,
