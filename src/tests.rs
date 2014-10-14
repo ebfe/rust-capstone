@@ -13,7 +13,7 @@ pub fn test_engine_disasm() {
     let tests = vec![
         Test{
             arch: ArchX86,
-            mode: Mode16,
+            mode: MODE_16,
             opts: vec![],
             code: vec![0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00],
             insn: vec![Insn{
@@ -39,7 +39,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchX86,
-            mode: Mode32,
+            mode: MODE_32,
             opts: vec![(OptSyntax, 2 /*ATT*/)],
             code: vec![0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00],
             insn: vec![Insn{
@@ -60,7 +60,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchX86,
-            mode: Mode32,
+            mode: MODE_32,
             opts: vec![],
             code: vec![0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00],
             insn: vec![Insn{
@@ -81,7 +81,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchX86,
-            mode: Mode64,
+            mode: MODE_64,
             opts: vec![],
             code: vec![0x55, 0x48, 0x8b, 0x05, 0xb8, 0x13, 0x00, 0x00],
             insn: vec![Insn{
@@ -97,7 +97,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchArm,
-            mode: ModeArm|ModeLittleEndian,
+            mode: MODE_ARM|MODE_LITTLE_ENDIAN,
             opts: vec![],
             code: vec![0xed, 0xff, 0xff, 0xeb, 0x04, 0xe0, 0x2d, 0xe5, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x83, 0x22, 0xe5, 0xf1, 0x02, 0x03, 0x0e, 0x00, 0x00, 0xa0, 0xe3, 0x02, 0x30, 0xc1, 0xe7, 0x00, 0x00, 0x53, 0xe3],
             insn: vec![Insn{
@@ -143,7 +143,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchArm,
-            mode: ModeThumb,
+            mode: MODE_THUMB,
             opts: vec![],
             code: vec![0x4f, 0xf0, 0x00, 0x01, 0xbd, 0xe8, 0x00, 0x88, 0xd1, 0xe8, 0x00, 0xf0],
             insn: vec![Insn{
@@ -164,7 +164,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchArm,
-            mode: ModeArm,
+            mode: MODE_ARM,
             opts: vec![],
             // ARM: Cortex-A15 + NEON,
             code: vec![0x10, 0xf1, 0x10, 0xe7, 0x11, 0xf2, 0x31, 0xe7, 0xdc, 0xa1, 0x2e, 0xf3, 0xe8, 0x4e, 0x62, 0xf3],
@@ -191,7 +191,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchArm,
-            mode: ModeThumb,
+            mode: MODE_THUMB,
             opts: vec![],
             // THUMB,
             code: vec![0x70, 0x47, 0xeb, 0x46, 0x83, 0xb0, 0xc9, 0x68],
@@ -218,7 +218,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchMIPS,
-            mode: Mode32 | ModeBigEndian,
+            mode: MODE_32| MODE_BIG_ENDIAN,
             opts: vec![],
             // MIPS-32 (Big-endian),
             code: vec![0x0c, 0x10, 0x00, 0x97, 0x00, 0x00, 0x00, 0x00, 0x24, 0x02, 0x00, 0x0c, 0x8f, 0xa2, 0x00, 0x00, 0x34, 0x21, 0x34, 0x56],
@@ -250,7 +250,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchMIPS,
-            mode: Mode64 | ModeLittleEndian,
+            mode: MODE_64| MODE_LITTLE_ENDIAN,
             opts: vec![],
             // MIPS-64-EL (Little-endian),
             code: vec![0x56, 0x34, 0x21, 0x34, 0xc2, 0x17, 0x01, 0x00],
@@ -267,7 +267,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchArm64,
-            mode: ModeArm,
+            mode: MODE_ARM,
             opts: vec![],
             code: vec![0x21, 0x7c, 0x02, 0x9b, 0x21, 0x7c, 0x00, 0x53, 0x00, 0x40, 0x21, 0x4b, 0xe1, 0x0b, 0x40, 0xb9, 0x10, 0x20, 0x21, 0x1e],
             insn: vec![Insn{
@@ -298,7 +298,7 @@ pub fn test_engine_disasm() {
             }],
         }, Test{
             arch: ArchPPC,
-            mode: ModeBigEndian,
+            mode: MODE_BIG_ENDIAN,
             opts: vec![],
             code: vec![0x80, 0x20, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x10, 0x43, 0x23, 0x0e, 0xd0, 0x44, 0x00, 0x80, 0x4c, 0x43, 0x22, 0x02, 0x2d, 0x03, 0x00, 0x80, 0x7c, 0x43, 0x20, 0x14, 0x7c, 0x43, 0x20, 0x93, 0x4f, 0x20, 0x00, 0x21, 0x4c, 0xc8, 0x00, 0x21],
             insn: vec![Insn{

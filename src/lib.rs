@@ -29,15 +29,15 @@ pub enum Arch {
 bitflags!(
     #[deriving(Show)]
 	flags Mode: u32 {
-		const ModeLittleEndian = 0,
-		const ModeArm          = 0,
-		const Mode16           = 1 << 1,
-		const Mode32           = 1 << 2,
-		const Mode64           = 1 << 3,
-		const ModeThumb        = 1 << 4,
-		const ModeMicro        = 1 << 4,
-		const ModeN64          = 1 << 5,
-		const ModeBigEndian    = 1 << 31
+		const MODE_LITTLE_ENDIAN= 0,
+		const MODE_ARM          = 0,
+		const MODE_16           = 1 << 1,
+		const MODE_32           = 1 << 2,
+		const MODE_64           = 1 << 3,
+		const MODE_THUMB        = 1 << 4,
+		const MODE_MICRO        = 1 << 4,
+		const MODE_N64          = 1 << 5,
+		const MODE_BIG_ENDIAN   = 1 << 31
 	}
 )
 
