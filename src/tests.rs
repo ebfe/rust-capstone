@@ -362,7 +362,7 @@ pub fn test_engine_disasm() {
                 for &(opt, val) in test.opts.iter() {
                     match e.set_option(opt, val) {
                         Ok(_) => (),
-                        Err(err) => fail!("#{} Engine::set_option({}, {}) failed: {}\n", i, opt, val, err),
+                        Err(err) => panic!("#{} Engine::set_option({}, {}) failed: {}\n", i, opt, val, err),
                     }
                 }
                 match e.disasm(test.code.as_slice(), 0x1000, 0) {
@@ -378,12 +378,12 @@ pub fn test_engine_disasm() {
                         }
                     }
                     Err(err) => {
-                        fail!("#{} Engine::disasm failed: {} {}", i, err.code, err.desc);
+                        panic!("#{} Engine::disasm failed: {} {}", i, err.code, err.desc);
                     }
                 }
             },
             Err(err) => {
-                fail!("#{} Engine::new failed: {} {}", i, err.code, err.desc);
+                panic!("#{} Engine::new failed: {} {}", i, err.code, err.desc);
             }
         }
     }
