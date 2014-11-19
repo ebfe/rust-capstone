@@ -20,7 +20,7 @@ pub fn test_engine_disasm() {
                 addr: 0x1000,
                 bytes: vec![0x8d, 0x4c, 0x32, ],
                 mnemonic: "lea".to_string(),
-                op_str: "cx, dword ptr [si + 0x32]".to_string(),
+                op_str: "cx, word ptr [si + 0x32]".to_string(),
             }, Insn{
                 addr: 0x1003,
                 bytes: vec![0x08, 0x01, ],
@@ -46,7 +46,7 @@ pub fn test_engine_disasm() {
                 addr: 0x1000,
                 bytes: vec![0x8d, 0x4c, 0x32, 0x08, ],
                 mnemonic: "leal".to_string(),
-                op_str: "dword ptr 8(%edx, %esi), %ecx".to_string(),
+                op_str: "8(%edx, %esi), %ecx".to_string(),
             }, Insn{
                 addr: 0x1004,
                 bytes: vec![0x01, 0xd8, ],
@@ -104,7 +104,7 @@ pub fn test_engine_disasm() {
                 addr: 0x1000,
                 bytes: vec![0xed, 0xff, 0xff, 0xeb, ],
                 mnemonic: "bl".to_string(),
-                op_str: "#-0x4c".to_string(),
+                op_str: "#0xfbc".to_string(),
             }, Insn{
                 addr: 0x1004,
                 bytes: vec![0x04, 0xe0, 0x2d, 0xe5, ],
@@ -297,7 +297,7 @@ pub fn test_engine_disasm() {
                 op_str: "s0, s1".to_string(),
             }],
         }, Test{
-            arch: Arch::PPC,
+            arch: Arch::PowerPC,
             mode: MODE_BIG_ENDIAN,
             opts: vec![],
             code: vec![0x80, 0x20, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x10, 0x43, 0x23, 0x0e, 0xd0, 0x44, 0x00, 0x80, 0x4c, 0x43, 0x22, 0x02, 0x2d, 0x03, 0x00, 0x80, 0x7c, 0x43, 0x20, 0x14, 0x7c, 0x43, 0x20, 0x93, 0x4f, 0x20, 0x00, 0x21, 0x4c, 0xc8, 0x00, 0x21],
@@ -349,8 +349,8 @@ pub fn test_engine_disasm() {
             }, Insn{
                 addr: 0x1024,
                 bytes: vec![0x4c, 0xc8, 0x00, 0x21, ],
-                mnemonic: "bclrl".to_string(),
-                op_str: "6, 8, 0".to_string(),
+                mnemonic: "bgelrl-".to_string(),
+                op_str: "cr2".to_string(),
             }],
         },
     ];
