@@ -19,26 +19,36 @@ mod tests;
 
 #[deriving(Show)]
 pub enum Arch {
-	Arm = 0,
-	Arm64,
-	MIPS,
-	X86,
-	PPC,
+    Arm = 0,
+    Arm64,
+    MIPS,
+    X86,
+    PowerPC,
+    Sparc,
+    SystemZ,
+    XCore,
 }
 
 bitflags!(
     #[deriving(Show)]
-	flags Mode: u32 {
-		const MODE_LITTLE_ENDIAN= 0,
-		const MODE_ARM          = 0,
-		const MODE_16           = 1 << 1,
-		const MODE_32           = 1 << 2,
-		const MODE_64           = 1 << 3,
-		const MODE_THUMB        = 1 << 4,
-		const MODE_MICRO        = 1 << 4,
-		const MODE_N64          = 1 << 5,
-		const MODE_BIG_ENDIAN   = 1 << 31
-	}
+    flags Mode: u32 {
+        const MODE_LITTLE_ENDIAN= 0,
+        const MODE_ARM          = 0,
+        const MODE_16           = 1 << 1,
+        const MODE_32           = 1 << 2,
+        const MODE_64           = 1 << 3,
+        const MODE_THUMB        = 1 << 4,
+        const MODE_MCLASS       = 1 << 5,
+        const MODE_V8           = 1 << 6,
+        const MODE_MICRO        = 1 << 4,
+        const MODE_MIPS3        = 1 << 5,
+        const MODE_MIPS32R6     = 1 << 6,
+        const MODE_MIPSGP64     = 1 << 7,
+        const MODE_V9           = 1 << 4,
+        const MODE_BIG_ENDIAN   = 1 << 31,
+        const MODE_MIPS32       = 1 << 2,
+        const MODE_MIPS64       = 1 << 3,
+    }
 )
 
 #[deriving(Show)]
@@ -76,7 +86,7 @@ pub struct Insn {
 }
 
 pub struct Engine {
-	handle: *const c_void
+    handle: *const c_void
 }
 
 impl Engine {
@@ -102,7 +112,7 @@ impl Engine {
     pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, Error> {
         unsafe {
             let mut cinsn : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
-            match ll::cs_disasm_ex(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut cinsn) {
+            match ll::cs_disasm(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut cinsn) {
                 0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
