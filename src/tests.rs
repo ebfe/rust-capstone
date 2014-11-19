@@ -12,7 +12,7 @@ pub fn test_engine_disasm() {
 
     let tests = vec![
         Test{
-            arch: ArchX86,
+            arch: Arch::X86,
             mode: MODE_16,
             opts: vec![],
             code: vec![0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00],
@@ -38,9 +38,9 @@ pub fn test_engine_disasm() {
                 op_str: "al, byte ptr [bx + si]".to_string(),
             }],
         }, Test{
-            arch: ArchX86,
+            arch: Arch::X86,
             mode: MODE_32,
-            opts: vec![(OptSyntax, 2 /*ATT*/)],
+            opts: vec![(Opt::Syntax, 2 /*ATT*/)],
             code: vec![0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00],
             insn: vec![Insn{
                 addr: 0x1000,
@@ -59,7 +59,7 @@ pub fn test_engine_disasm() {
                 op_str: "$0x1234, %esi".to_string(),
             }],
         }, Test{
-            arch: ArchX86,
+            arch: Arch::X86,
             mode: MODE_32,
             opts: vec![],
             code: vec![0x8d, 0x4c, 0x32, 0x08, 0x01, 0xd8, 0x81, 0xc6, 0x34, 0x12, 0x00, 0x00],
@@ -80,7 +80,7 @@ pub fn test_engine_disasm() {
                 op_str: "esi, 0x1234".to_string(),
             }],
         }, Test{
-            arch: ArchX86,
+            arch: Arch::X86,
             mode: MODE_64,
             opts: vec![],
             code: vec![0x55, 0x48, 0x8b, 0x05, 0xb8, 0x13, 0x00, 0x00],
@@ -96,7 +96,7 @@ pub fn test_engine_disasm() {
                 op_str: "rax, qword ptr [rip + 0x13b8]".to_string(),
             }],
         }, Test{
-            arch: ArchArm,
+            arch: Arch::Arm,
             mode: MODE_ARM|MODE_LITTLE_ENDIAN,
             opts: vec![],
             code: vec![0xed, 0xff, 0xff, 0xeb, 0x04, 0xe0, 0x2d, 0xe5, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x83, 0x22, 0xe5, 0xf1, 0x02, 0x03, 0x0e, 0x00, 0x00, 0xa0, 0xe3, 0x02, 0x30, 0xc1, 0xe7, 0x00, 0x00, 0x53, 0xe3],
@@ -142,7 +142,7 @@ pub fn test_engine_disasm() {
                 op_str: "r3, #0".to_string(),
             }],
         }, Test{
-            arch: ArchArm,
+            arch: Arch::Arm,
             mode: MODE_THUMB,
             opts: vec![],
             code: vec![0x4f, 0xf0, 0x00, 0x01, 0xbd, 0xe8, 0x00, 0x88, 0xd1, 0xe8, 0x00, 0xf0],
@@ -163,7 +163,7 @@ pub fn test_engine_disasm() {
                 op_str: "[r1, r0]".to_string(),
             }],
         }, Test{
-            arch: ArchArm,
+            arch: Arch::Arm,
             mode: MODE_ARM,
             opts: vec![],
             // ARM: Cortex-A15 + NEON,
@@ -190,7 +190,7 @@ pub fn test_engine_disasm() {
                 op_str: "q10, q9, q12".to_string(),
             }],
         }, Test{
-            arch: ArchArm,
+            arch: Arch::Arm,
             mode: MODE_THUMB,
             opts: vec![],
             // THUMB,
@@ -217,7 +217,7 @@ pub fn test_engine_disasm() {
                 op_str: "r1, [r1, #0xc]".to_string(),
             }],
         }, Test{
-            arch: ArchMIPS,
+            arch: Arch::MIPS,
             mode: MODE_32| MODE_BIG_ENDIAN,
             opts: vec![],
             // MIPS-32 (Big-endian),
@@ -249,7 +249,7 @@ pub fn test_engine_disasm() {
                 op_str: "$at, $at, 0x3456".to_string(),
             }],
         }, Test{
-            arch: ArchMIPS,
+            arch: Arch::MIPS,
             mode: MODE_64| MODE_LITTLE_ENDIAN,
             opts: vec![],
             // MIPS-64-EL (Little-endian),
@@ -266,7 +266,7 @@ pub fn test_engine_disasm() {
                 op_str: "$v0, $at, 0x1f".to_string(),
             }],
         }, Test{
-            arch: ArchArm64,
+            arch: Arch::Arm64,
             mode: MODE_ARM,
             opts: vec![],
             code: vec![0x21, 0x7c, 0x02, 0x9b, 0x21, 0x7c, 0x00, 0x53, 0x00, 0x40, 0x21, 0x4b, 0xe1, 0x0b, 0x40, 0xb9, 0x10, 0x20, 0x21, 0x1e],
@@ -297,7 +297,7 @@ pub fn test_engine_disasm() {
                 op_str: "s0, s1".to_string(),
             }],
         }, Test{
-            arch: ArchPPC,
+            arch: Arch::PPC,
             mode: MODE_BIG_ENDIAN,
             opts: vec![],
             code: vec![0x80, 0x20, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x10, 0x43, 0x23, 0x0e, 0xd0, 0x44, 0x00, 0x80, 0x4c, 0x43, 0x22, 0x02, 0x2d, 0x03, 0x00, 0x80, 0x7c, 0x43, 0x20, 0x14, 0x7c, 0x43, 0x20, 0x93, 0x4f, 0x20, 0x00, 0x21, 0x4c, 0xc8, 0x00, 0x21],

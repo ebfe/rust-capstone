@@ -19,11 +19,11 @@ mod tests;
 
 #[deriving(Show)]
 pub enum Arch {
-	ArchArm = 0,
-	ArchArm64,
-	ArchMIPS,
-	ArchX86,
-	ArchPPC,
+	Arm = 0,
+	Arm64,
+	MIPS,
+	X86,
+	PPC,
 }
 
 bitflags!(
@@ -43,9 +43,9 @@ bitflags!(
 
 #[deriving(Show)]
 pub enum Opt {
-    OptSyntax = 1,
-    OptDetail,
-    OptMode,
+    Syntax = 1,
+    Detail,
+    Mode,
     // OptMem
 }
 
