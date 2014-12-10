@@ -17,7 +17,7 @@ mod ll;
 #[cfg(test)]
 mod tests;
 
-#[deriving(Show)]
+#[deriving(Copy, Show)]
 pub enum Arch {
     Arm = 0,
     Arm64,
@@ -30,7 +30,7 @@ pub enum Arch {
 }
 
 bitflags!(
-    #[deriving(Show)]
+    #[deriving(Copy, Show)]
     flags Mode: u32 {
         const MODE_LITTLE_ENDIAN= 0,
         const MODE_ARM          = 0,
@@ -51,7 +51,7 @@ bitflags!(
     }
 )
 
-#[deriving(Show)]
+#[deriving(Copy, Show)]
 pub enum Opt {
     Syntax = 1,
     Detail,
