@@ -30,7 +30,7 @@ pub enum Arch {
 }
 
 bitflags!(
-    #[deriving(Copy, Show)]
+    #[deriving(Show)]
     flags Mode: u32 {
         const MODE_LITTLE_ENDIAN= 0,
         const MODE_ARM          = 0,
