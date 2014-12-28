@@ -49,7 +49,7 @@ bitflags!(
         const MODE_MIPS32       = 1 << 2,
         const MODE_MIPS64       = 1 << 3,
     }
-)
+);
 
 #[deriving(Copy, Show)]
 pub enum Opt {
