@@ -14,9 +14,9 @@ pub struct cs_insn {
     pub id: c_uint,
     pub address: u64,
     pub size: u16,
-    pub bytes: [u8, ..16u],
-    pub mnemonic: [u8, ..32u],
-    pub op_str: [u8, ..160u],
+    pub bytes: [u8; 16],
+    pub mnemonic: [u8; 32],
+    pub op_str: [u8; 160],
     pub detail: *const c_void,
 }
 
