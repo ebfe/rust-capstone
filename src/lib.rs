@@ -119,7 +119,7 @@ impl Engine {
                     v.extend(CVec::new(cinsn, n as uint).as_slice().iter().map(|ci| {
                         Insn{
                             addr:     ci.address,
-                            bytes:    Vec::from_fn(ci.size as uint, |n| { ci.bytes[n] }),
+                            bytes:    range(0, ci.size as uint).map(|i| ci.bytes[i]).collect(),
                             mnemonic: CString::new(ci.mnemonic.as_ptr() as *const i8, false).as_str().unwrap_or("<invalid utf8>").to_string(),
                             op_str:   CString::new(ci.op_str.as_ptr() as *const i8, false).as_str().unwrap_or("<invalid utf8>").to_string(),
                         }
