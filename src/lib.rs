@@ -17,7 +17,7 @@ mod ll;
 #[cfg(test)]
 mod tests;
 
-#[deriving(Copy, Show)]
+#[derive(Copy, Show)]
 pub enum Arch {
     Arm = 0,
     Arm64,
@@ -30,7 +30,7 @@ pub enum Arch {
 }
 
 bitflags!(
-    #[deriving(Show)]
+    #[derive(Show)]
     flags Mode: u32 {
         const MODE_LITTLE_ENDIAN= 0,
         const MODE_ARM          = 0,
@@ -51,7 +51,7 @@ bitflags!(
     }
 );
 
-#[deriving(Copy, Show)]
+#[derive(Copy, Show)]
 pub enum Opt {
     Syntax = 1,
     Detail,
@@ -59,7 +59,7 @@ pub enum Opt {
     // OptMem
 }
 
-#[deriving(Show)]
+#[derive(Show)]
 pub struct Error {
     pub code: uint,
     pub desc: Option<String>,
