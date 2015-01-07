@@ -7,8 +7,10 @@ extern crate core;
 extern crate serialize;
 
 use libc::{c_int, c_void, size_t};
-use std::c_str::CString;
-use std::c_vec::CVec;
+use std::ffi::c_str_to_bytes;
+use std::mem;
+use std::raw::Slice;
+use std::str::from_utf8;
 
 mod ll;
 
@@ -66,12 +68,8 @@ pub struct Error {
 impl Error {
     fn new(err: uint) -> Error {
         unsafe {
-            match CString::new(ll::cs_strerror(err as i32), false).as_str() {
-                Some(s) =>
-                    Error{ code: err, desc: Some(s.to_string()) },
-                None =>
-                    Error{ code: err, desc: None },
-            }
+            let cstr = ll::cs_strerror(err as i32) as *const i8;
+            Error{ code: err, desc: Some(c_str_to_bytes(&cstr).to_string()) }
         }
     }
 }
@@ -109,21 +107,22 @@ impl Engine {
 
     pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, Error> {
         unsafe {
-            let mut cinsn : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
-            match ll::cs_disasm(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut cinsn) {
+            let mut cinsnptr : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
+            match ll::cs_disasm(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut cinsnptr) {
                 0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
-                    v.extend(CVec::new(cinsn, n as uint).as_slice().iter().map(|ci| {
+                    let cinsn : &[ll::cs_insn] = mem::transmute(Slice{ data: cinsnptr, len: n as uint});
+                    v.extend(cinsn.iter().map(|ci| {
                         Insn{
                             addr:     ci.address,
                             bytes:    range(0, ci.size as uint).map(|i| ci.bytes[i]).collect(),
-                            mnemonic: CString::new(ci.mnemonic.as_ptr() as *const i8, false).as_str().unwrap_or("<invalid utf8>").to_string(),
-                            op_str:   CString::new(ci.op_str.as_ptr() as *const i8, false).as_str().unwrap_or("<invalid utf8>").to_string(),
+                            mnemonic: from_utf8(c_str_to_bytes(&(ci.mnemonic.as_ptr() as *const i8))).unwrap_or("<invalid utf8>").to_string(),
+                            op_str:   from_utf8(c_str_to_bytes(&(ci.op_str.as_ptr() as *const i8))).unwrap_or("<invalid utf8>").to_string(),
                         }
 
                     }));
-                    ll::cs_free(cinsn, n);
+                    ll::cs_free(cinsnptr, n);
                     Ok(v)
                 },
             }
