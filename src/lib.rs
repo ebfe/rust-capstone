@@ -2,8 +2,6 @@
 #![crate_type="rlib"]
 #![experimental]
 
-#![feature(globs)]
-
 extern crate libc;
 extern crate core;
 extern crate serialize;
