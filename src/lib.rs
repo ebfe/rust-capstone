@@ -69,7 +69,7 @@ impl Error {
     fn new(err: uint) -> Error {
         unsafe {
             let cstr = ll::cs_strerror(err as i32) as *const i8;
-            Error{ code: err, desc: Some(c_str_to_bytes(&cstr).to_string()) }
+            Error{ code: err, desc: Some(String::from_utf8_lossy(c_str_to_bytes(&cstr)).to_string()) }
         }
     }
 }
