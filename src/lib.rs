@@ -61,12 +61,12 @@ pub enum Opt {
 
 #[derive(Show)]
 pub struct Error {
-    pub code: uint,
+    pub code: usize,
     pub desc: Option<String>,
 }
 
 impl Error {
-    fn new(err: uint) -> Error {
+    fn new(err: usize) -> Error {
         unsafe {
             let cstr = ll::cs_strerror(err as i32) as *const i8;
             Error{ code: err, desc: Some(String::from_utf8_lossy(c_str_to_bytes(&cstr)).to_string()) }
@@ -91,32 +91,32 @@ impl Engine {
         unsafe {
             match ll::cs_open(arch as c_int, mode.bits as c_int, &mut handle) {
                 0 => Ok(Engine{handle: handle}),
-                e => Err(Error::new(e as uint)),
+                e => Err(Error::new(e as usize)),
             }
         }
     }
 
-    pub fn set_option(&self, option: Opt, value: uint) -> Result<(), Error> {
+    pub fn set_option(&self, option: Opt, value: usize) -> Result<(), Error> {
         unsafe {
             match ll::cs_option(self.handle, option as c_int, value as size_t) {
                 0 => Ok(()),
-                e => Err(Error::new(e as uint)),
+                e => Err(Error::new(e as usize)),
             }
         }
     }
 
-    pub fn disasm(&self, code: &[u8], addr: u64, count: uint) -> Result<Vec<Insn>, Error> {
+    pub fn disasm(&self, code: &[u8], addr: u64, count: usize) -> Result<Vec<Insn>, Error> {
         unsafe {
             let mut cinsnptr : *mut ll::cs_insn = 0 as *mut ll::cs_insn;
             match ll::cs_disasm(self.handle, code.as_ptr(), code.len() as size_t, addr, count as size_t, &mut cinsnptr) {
                 0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
-                    let cinsn : &[ll::cs_insn] = mem::transmute(Slice{ data: cinsnptr, len: n as uint});
+                    let cinsn : &[ll::cs_insn] = mem::transmute(Slice{ data: cinsnptr, len: n as usize});
                     v.extend(cinsn.iter().map(|ci| {
                         Insn{
                             addr:     ci.address,
-                            bytes:    range(0, ci.size as uint).map(|i| ci.bytes[i]).collect(),
+                            bytes:    range(0, ci.size as usize).map(|i| ci.bytes[i]).collect(),
                             mnemonic: from_utf8(c_str_to_bytes(&(ci.mnemonic.as_ptr() as *const i8))).unwrap_or("<invalid utf8>").to_string(),
                             op_str:   from_utf8(c_str_to_bytes(&(ci.op_str.as_ptr() as *const i8))).unwrap_or("<invalid utf8>").to_string(),
                         }
@@ -129,8 +129,8 @@ impl Engine {
         }
     }
 
-    fn errno(&self) -> uint {
-        unsafe{ ll::cs_errno(self.handle) as uint }
+    fn errno(&self) -> usize {
+        unsafe{ ll::cs_errno(self.handle) as usize }
     }
 }
 
@@ -140,11 +140,11 @@ impl Drop for Engine {
     }
 }
 
-pub fn version() -> (int, int) {
+pub fn version() -> (isize, isize) {
     let mut major : c_int = 0;
     let mut minor : c_int = 0;
     unsafe{ ll::cs_version(&mut major, &mut minor);}
-    (major as int, minor as int)
+    (major as isize, minor as isize)
 }
 
 pub fn supports(arch: Arch) -> bool {
