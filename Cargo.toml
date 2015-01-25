@@ -2,3 +2,6 @@
 name = "capstone"
 version = "0.0.0"
 authors = ["Michael Gehring <mg@ebfe.org>"]
+
+[dependencies.bitflags]
+git = "https://github.com/rust-lang/bitflags"

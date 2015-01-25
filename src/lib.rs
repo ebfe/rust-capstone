@@ -6,6 +6,8 @@ extern crate libc;
 extern crate core;
 extern crate serialize;
 
+#[macro_use] extern crate bitflags;
+
 use libc::{c_int, c_void, size_t};
 use std::ffi::c_str_to_bytes;
 use std::mem;
