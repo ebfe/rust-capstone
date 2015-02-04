@@ -5,7 +5,7 @@ pub fn test_engine_disasm() {
     struct Test {
         arch: Arch,
         mode: Mode,
-        opts: Vec<(Opt, uint)>,
+        opts: Vec<(Opt, usize)>,
         code: Vec<u8>,
         insn: Vec<Insn>,
     };
