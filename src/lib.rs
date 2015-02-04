@@ -1,10 +1,10 @@
 #![crate_name="capstone"]
 #![crate_type="rlib"]
-#![experimental]
+#![feature(collections, core, hash, libc, std_misc)]
+#![unstable]
 
 extern crate libc;
 extern crate core;
-extern crate serialize;
 
 #[macro_use] extern crate bitflags;
 
