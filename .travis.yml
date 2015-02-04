@@ -2,4 +2,4 @@ language: rust
 
 install:
         - git clone https://github.com/aquynh/capstone
-        - (cd capstone && git checkout 3.0 && sudo make install)
+        - (cd capstone && git checkout 3.0.1 && sudo make install)
