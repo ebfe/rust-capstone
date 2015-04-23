@@ -365,7 +365,7 @@ pub fn test_engine_disasm() {
                         Err(err) => panic!("#{} Engine::set_option({:?}, {:?}) failed: {:?}\n", i, opt, val, err),
                     }
                 }
-                match e.disasm(test.code.as_slice(), 0x1000, 0) {
+                match e.disasm(test.code.as_ref(), 0x1000, 0) {
                     Ok(insns) => {
                         assert!(insns.len() == test.insn.len());
                         for (out, expected) in insns.iter().zip(test.insn.iter()) {
