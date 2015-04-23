@@ -1,7 +1,6 @@
 #![crate_name="capstone"]
 #![crate_type="rlib"]
-#![feature(core, hash, libc, std_misc)]
-#![unstable]
+#![feature(core, libc)]
 
 extern crate libc;
 extern crate core;
