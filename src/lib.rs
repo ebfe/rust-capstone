@@ -9,7 +9,7 @@ extern crate core;
 #[macro_use] extern crate bitflags;
 
 use libc::{c_int, c_void, size_t};
-use std::ffi::c_str_to_bytes;
+use std::ffi::CStr;
 use std::mem;
 use std::raw::Slice;
 use std::str::from_utf8;
@@ -71,7 +71,7 @@ impl Error {
     fn new(err: usize) -> Error {
         unsafe {
             let cstr = ll::cs_strerror(err as i32) as *const i8;
-            Error{ code: err, desc: Some(String::from_utf8_lossy(c_str_to_bytes(&cstr)).to_string()) }
+            Error{ code: err, desc: Some(String::from_utf8_lossy(CStr::from_ptr(cstr).to_bytes()).to_string()) }
         }
     }
 }
@@ -118,9 +118,9 @@ impl Engine {
                     v.extend(cinsn.iter().map(|ci| {
                         Insn{
                             addr:     ci.address,
-                            bytes:    range(0, ci.size as usize).map(|i| ci.bytes[i]).collect(),
-                            mnemonic: from_utf8(c_str_to_bytes(&(ci.mnemonic.as_ptr() as *const i8))).unwrap_or("<invalid utf8>").to_string(),
-                            op_str:   from_utf8(c_str_to_bytes(&(ci.op_str.as_ptr() as *const i8))).unwrap_or("<invalid utf8>").to_string(),
+                            bytes:    (0..ci.size as usize).map(|i| ci.bytes[i]).collect(),
+                            mnemonic: from_utf8(CStr::from_ptr(ci.mnemonic.as_ptr() as *const i8).to_bytes()).unwrap_or("<invalid utf8>").to_string(),
+                            op_str:   from_utf8(CStr::from_ptr(ci.op_str.as_ptr() as *const i8).to_bytes()).unwrap_or("<invalid utf8>").to_string(),
                         }
 
                     }));
