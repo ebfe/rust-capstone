@@ -19,7 +19,7 @@ mod ll;
 #[cfg(test)]
 mod tests;
 
-#[derive(Copy, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum Arch {
     Arm = 0,
     Arm64,
@@ -53,7 +53,7 @@ bitflags!(
     }
 );
 
-#[derive(Copy, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum Opt {
     Syntax = 1,
     Detail,
