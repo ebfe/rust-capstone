@@ -31,7 +31,6 @@ pub enum Arch {
 }
 
 bitflags!(
-    #[derive(Debug)]
     flags Mode: u32 {
         const MODE_LITTLE_ENDIAN= 0,
         const MODE_ARM          = 0,
