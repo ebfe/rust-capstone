@@ -5,3 +5,4 @@ authors = ["Michael Gehring <mg@ebfe.org>"]
 
 [dependencies]
 bitflags = "*"
+libc = "*"

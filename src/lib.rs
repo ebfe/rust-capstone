@@ -1,16 +1,12 @@
 #![crate_name="capstone"]
 #![crate_type="rlib"]
-#![feature(core, libc)]
 
 extern crate libc;
-extern crate core;
 
 #[macro_use] extern crate bitflags;
 
 use libc::{c_int, c_void, size_t};
 use std::ffi::CStr;
-use std::mem;
-use std::raw::Slice;
 use std::str::from_utf8;
 
 mod ll;
@@ -112,7 +108,7 @@ impl Engine {
                 0 => Err(Error::new(self.errno())),
                 n => {
                     let mut v = Vec::new();
-                    let cinsn : &[ll::cs_insn] = mem::transmute(Slice{ data: cinsnptr, len: n as usize});
+                    let cinsn : &[ll::cs_insn] = std::slice::from_raw_parts(cinsnptr, n as usize);
                     v.extend(cinsn.iter().map(|ci| {
                         Insn{
                             addr:     ci.address,
