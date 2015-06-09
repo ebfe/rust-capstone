@@ -357,6 +357,10 @@ pub fn test_engine_disasm() {
 
     for (i, test) in tests.iter().enumerate() {
         println!("test case #{} / {:?} {:?}", i, test.arch, test.mode);
+        if !supports(test.arch) {
+            println!("skipped - arch {:?} no supported", test.arch);
+            continue;
+        }
         match Engine::new(test.arch, test.mode) {
             Ok(e) => {
                 for &(opt, val) in test.opts.iter() {

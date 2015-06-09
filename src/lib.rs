@@ -144,5 +144,5 @@ pub fn version() -> (isize, isize) {
 }
 
 pub fn supports(arch: Arch) -> bool {
-    unsafe{ ll::cs_support(arch as c_int) == 0 }
+    unsafe{ ll::cs_support(arch as c_int) != 0 }
 }
