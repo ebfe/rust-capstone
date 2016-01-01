@@ -7,7 +7,6 @@ extern crate libc;
 
 use libc::{c_int, c_void, size_t};
 use std::ffi::CStr;
-use std::str::from_utf8;
 
 mod ll;
 
@@ -64,7 +63,7 @@ pub struct Error {
 impl Error {
     fn new(err: usize) -> Error {
         unsafe {
-            let cstr = ll::cs_strerror(err as i32) as *const i8;
+            let cstr = ll::cs_strerror(err as i32) as *const _;
             Error{ code: err, desc: Some(String::from_utf8_lossy(CStr::from_ptr(cstr).to_bytes()).to_string()) }
         }
     }
@@ -113,8 +112,8 @@ impl Engine {
                         Insn{
                             addr:     ci.address,
                             bytes:    (0..ci.size as usize).map(|i| ci.bytes[i]).collect(),
-                            mnemonic: from_utf8(CStr::from_ptr(ci.mnemonic.as_ptr() as *const i8).to_bytes()).unwrap_or("<invalid utf8>").to_string(),
-                            op_str:   from_utf8(CStr::from_ptr(ci.op_str.as_ptr() as *const i8).to_bytes()).unwrap_or("<invalid utf8>").to_string(),
+                            mnemonic: String::from_utf8_lossy(CStr::from_ptr(ci.mnemonic.as_ptr() as *const _).to_bytes()).to_string(),
+                            op_str:   String::from_utf8_lossy(CStr::from_ptr(ci.op_str.as_ptr() as *const _).to_bytes()).to_string(),
                         }
 
                     }));
