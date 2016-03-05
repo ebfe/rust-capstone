@@ -4,5 +4,5 @@ version = "0.0.0"
 authors = ["Michael Gehring <mg@ebfe.org>"]
 
 [dependencies]
-bitflags = "*"
+bitflags = "0.5"
 libc = "*"
